@@ -19,11 +19,13 @@ async fn search_github_repositories(query: &str, access_token: &str) -> Result<R
     let client = Client::new();
     let url = format!("https://api.github.com/search/repositories?q={}&per_page=100", query);
 
+    let user_agent = format!("{}/{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+
     let request = client
         .get(url)
         .header(header::ACCEPT, "application/vnd.github+json")
         .header(header::AUTHORIZATION, format!("Bearer {}", access_token))
-        .header(header::USER_AGENT, "ghs/0.0.1")
+        .header(header::USER_AGENT, user_agent)
         .header("X-GitHub-Api-Version", "2022-11-28")
         .send()
         .await?;
